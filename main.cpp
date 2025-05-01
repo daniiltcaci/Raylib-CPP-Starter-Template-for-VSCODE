@@ -3,41 +3,86 @@
 
 using namespace std;
 
+typedef enum{ TITLE, MENU_CHOIX_PERSO, GAMEPLAY, GAME_END } Gamescreen; 
+
 int main () {
 
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
-    int ball_x = 100;
-    int ball_y = 100;
-    int ball_speed_x = 5;
-    int ball_speed_y = 5;
-    int ball_radius = 15;
-
-    cout << "Hello World" << endl;
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "My first RAYLIB program!");
+    Gamescreen currentscreen = TITLE;
     SetTargetFPS(60);
 
-    while (WindowShouldClose() == false){
-   
-        ball_x += ball_speed_x;
-        ball_y += ball_speed_y;
-
-        if(ball_x + ball_radius >= SCREEN_WIDTH || ball_x - ball_radius <= 0)
+    while (!WindowShouldClose())
+    {
+        switch (currentscreen)
         {
-            ball_speed_x *= -1;
-        }
+            case TITLE:
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                currentscreen = MENU_CHOIX_PERSO;
+            }
+            break;
 
-        if(ball_y + ball_radius >= SCREEN_HEIGHT || ball_y - ball_radius <= 0)
-        {
-            ball_speed_y *= -1;
+            case MENU_CHOIX_PERSO:
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                currentscreen = GAMEPLAY;
+            }
+            break;
+
+            case GAMEPLAY:
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                currentscreen = GAME_END;
+            }
+            break;
+
+            case GAME_END:
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                currentscreen = TITLE;
+            }
+            break;
+
+        default:break;
         }
-        
         BeginDrawing();
-            ClearBackground(BLACK);
-            DrawCircle(ball_x,ball_y,ball_radius, WHITE);
+
+        ClearBackground(RAYWHITE);
+
+        switch (currentscreen)
+        {
+
+        case TITLE:
+            {
+            DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GREEN);
+            DrawText("TITLE SCREEN", 20, 20, 40, WHITE);
+            }
+        break;
+
+        case MENU_CHOIX_PERSO:
+           { DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, RED);
+            DrawText("MENU_CHOIX_PERSO", 20, 20, 40, WHITE);}
+        break;
+
+        case GAMEPLAY:
+            {DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, BLUE);
+            DrawText("GAMEPLAY", 20, 20, 40, WHITE);}
+        break;
+
+        case GAME_END:
+           { DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, BLACK);
+            DrawText("YANISSE JE TE SUCE", 20, 20, 40, WHITE);}
+        break;
+
+        
+        default:break;
+        }
         EndDrawing();
     }
 
     CloseWindow();
+    return 0;
 }
